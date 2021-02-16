@@ -7,7 +7,7 @@ Vue.use(Vuex);
 const state = () => {
   return {
     contentList: [],
-    category: [],
+    categoryList: [],
     adsList: [],
   };
 };
@@ -26,12 +26,11 @@ const actions = {
   },
 
   //필터 카테고리
-  async getCategory({ commit }) {
+  async getCategoryList({ commit }) {
     await axios
       .get(`/api/category`)
       .then((res) => {
-        //console.log(res.data.category[0].id);
-        commit("setCategory", res.data.category);
+        commit("setCategoryList", res.data.category);
       })
       .catch((e) => {
         console.log(e);
@@ -55,8 +54,8 @@ const mutations = {
   setContentList(state, contentList) {
     state.contentList = contentList;
   },
-  setCategory(state, category) {
-    state.category = category;
+  setCategoryList(state, categoryList) {
+    state.categoryList = categoryList;
   },
   setAdsList(state, adsList) {
     state.adsList = adsList;
@@ -67,8 +66,8 @@ const getters = {
   contentList(state) {
     return state.contentList;
   },
-  category(state) {
-    return state.category;
+  categoryList(state) {
+    return state.categoryList;
   },
   adsList(state) {
     return state.adsList;

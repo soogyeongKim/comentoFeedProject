@@ -15,7 +15,7 @@ export default {
     width: 100%;
     height: 70px;
     line-height: 70px;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.07);
@@ -32,6 +32,7 @@ export default {
 
         @media only screen and (max-width: 768px) {
             margin: 0 15px;
+            line-height: 45px;
         }
     }
 }

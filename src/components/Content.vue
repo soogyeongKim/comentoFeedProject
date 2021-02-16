@@ -1,7 +1,7 @@
 <template>
   <div id="content">
         <div class="content-header">
-            <p class="header-category">category_name</p>
+            <p class="header-category">{{ category.filter((c)=> c.id === content.category_id)[0].name }}</p>
             <p class="header-id">{{ content.id }}</p>
         </div>
         <div class="content-info">
@@ -19,7 +19,10 @@
 export default {
     props: {
         content: {
-        type: Object,
+            type: Object,
+        },
+        category: {
+            type: Array,
         },
     },
     methods : {

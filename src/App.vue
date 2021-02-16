@@ -6,16 +6,18 @@
       <Login/>
       </div>
       <div id="right-wrapper">
-        <FilterBox/>
+        <FilterBox @changeOrd="listOrd" @openFilterModal="isFiltered=true"/>
         <template v-for="(content,index) in contentList.data" >
-        <Content :key="'content'+content.id"  :content="content"/>
+        <Content :key="'content'+content.id"  :content="content" :category="categoryList"/>
           <template v-if="(index + 1) % 3 === 0" >
             <Sponsor :key="'ad'+index" :ad="adsList.data[parseInt(index/3)]"/>
           </template>
         </template>
       </div>
     </div>
-   
+
+    <!-- 모달 팝업 창 -->
+    <FilterModal v-show="isFiltered" :categoryList="categoryList" @saveClose="listFilter" @close="isFiltered = false"/>
   </div>
 </template>
 
@@ -26,6 +28,7 @@ import Login from './components/Login'
 import FilterBox from './components/FilterBox'
 import Content from './components/Content'
 import Sponsor from './components/Sponsor'
+import FilterModal from './components/FilterModal'
 
 export default {
   name: 'App',
@@ -34,30 +37,45 @@ export default {
     Login,
     FilterBox,
     Content,
-    Sponsor
+    Sponsor,
+    FilterModal
+  },
+  data(){
+    return{
+      isFiltered : false,
+      allCategory : [],
+      checkedCategory : []
+    }
   },
   mounted(){
-    this.listInitial()
+    this.getCategoryList()
     this.adsInital()
   },
   computed: {
       ...mapGetters({
         contentList: 'contentList',
-        category: 'category',
+        categoryList: 'categoryList',
         adsList: 'adsList'
       })
+  },
+   watch:{
+     categoryList(category){
+       this.allCategory = category.map((c)=>c.id)
+       this.listInitial(null, this.allCategory)
+     }
   },
   methods: {
     ...mapActions({
       getContentList: 'getContentList',
-      getCategory: 'getCategory',
+      getCategoryList: 'getCategoryList',
       getAdsList: 'getAdsList'
     }),
-    listInitial(){
+    listInitial(ord, selectedCategory){
+      const orderList = ord ? ord : 'asc'
       const params = {
           page  : 1,
-          ord : 'asc',
-          category : [1,2,3],
+          ord : orderList,
+          category : selectedCategory,
           limit : 10,
       }
       this.getContentList(params)
@@ -68,6 +86,16 @@ export default {
           limit : 3,
       }
       this.getAdsList(params)
+    },
+    listOrd(ord){
+      if(ord){
+        this.listInitial(ord, this.checkedCategory ? this.checkedCategory : this.allCategory)
+      }
+    },
+    listFilter(checkedCategory){
+      this.isFiltered = false
+      this.checkedCategory = checkedCategory
+      this.listInitial(null,checkedCategory)
     }
   },
 }

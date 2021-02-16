@@ -1,16 +1,38 @@
 <template>
   <div id="filter-container">
         <ul class="filter-label"> 
-          <li>오름차순</li>
-          <li>내림차순</li>
+          <li 
+            v-for="(filter, index) in filters" 
+            :key="index" 
+            :class="{active : filter === selectedFilter}" 
+            @click="changeFilter(filter)">
+            {{ filter === 'asc' ?  '오름차순' : '내림차순'}}
+          </li>
         </ul>
-        <button class="filter-btn">필터</button>
+        <button class="filter-btn" @click="selecteCategory">필터</button>
   </div>
 </template>
 
 <script>
 export default {
-
+  data() {
+    return {
+      filters:['asc','desc'],
+      selectedFilter :''
+    }
+  },
+  created() {
+    this.selectedFilter = this.filters[0]
+  },
+  methods: {
+    changeFilter(filter){
+      this.selectedFilter = filter
+      this.$emit('changeOrd', this.selectedFilter);
+    },
+    selecteCategory(){
+      this.$emit('openFilterModal');
+    }
+  }
 }
 </script>
 
@@ -34,14 +56,25 @@ export default {
 
         li {
         float:left;
-        color: $sub-font-color;
+        color: #adb5bd;
         margin-right: 13px;
+        cursor: pointer;
         }
 
         li::before {
-            content: "\2022"; 
+          content: "\2022"; 
+          font-size: x-large;
+          vertical-align: middle;
+          color: #e1e4e7; 
+          display: inline-block; 
+        }
+
+        .active {
+          color: $sub-font-color;
+
+          &:before {
             color: $comento-green; 
-            display: inline-block; 
+          }
         }
     }
 
