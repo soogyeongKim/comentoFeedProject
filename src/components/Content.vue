@@ -58,6 +58,7 @@ export default {
     border: $border;
     background-color: #ffffff;
     margin-bottom: 30px;
+    cursor: pointer;
 
     @media only screen and (max-width: 768px) {
       border: none;

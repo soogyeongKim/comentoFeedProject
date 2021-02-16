@@ -9,6 +9,7 @@ const state = () => {
     contentList: [],
     categoryList: [],
     adsList: [],
+    detail: {},
   };
 };
 
@@ -48,6 +49,18 @@ const actions = {
         console.log(e);
       });
   },
+
+  //글 디테일
+  async getDetail({ commit }, params) {
+    await axios
+      .get(`/api/view`, { params })
+      .then((res) => {
+        commit("setDetail", res.data.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  },
 };
 
 const mutations = {
@@ -60,6 +73,9 @@ const mutations = {
   setAdsList(state, adsList) {
     state.adsList = adsList;
   },
+  setDetail(state, detail) {
+    state.detail = detail;
+  },
 };
 
 const getters = {
@@ -71,6 +87,9 @@ const getters = {
   },
   adsList(state) {
     return state.adsList;
+  },
+  detail(state) {
+    return state.detail;
   },
 };
 

@@ -1,23 +1,23 @@
 <template>
-    <div>
-        <div id="all-content-wrapper">
-            <div id="left-wrapper">
-            <Login/>
-            </div>
-            <div id="right-wrapper">
-                <FilterBox @changeOrd="listOrd" @openFilterModal="isFiltered=true"/>
-                <template v-for="(content,index) in contentList.data" >
-                <Content :key="'content'+content.id" :content="content" :category="categoryList" @click.native="goDetail(content.id)"/>
-                <template v-if="(index + 1) % 3 === 0" >
-                    <Sponsor :key="'ad'+index" :ad="adsList.data[parseInt(index/3)]"/>
-                </template>
-                </template>
-            </div>
-            </div>
+  <div id="main">
+    <div id="all-content-wrapper">
+      <div id="left-wrapper">
+        <Login/>
+      </div>
+      <div id="right-wrapper">
+          <FilterBox @changeOrd="listOrd" @openFilterModal="isFiltered=true"/>
+          <template v-for="(content,index) in contentList.data" >
+            <Content :key="'content'+content.id" :content="content" :category="categoryList" @click.native="goDetail(content.id)"/>
+            <template v-if="(index + 1) % 3 === 0" >
+                <Sponsor :key="'ad'+index" :ad="adsList.data[parseInt(index/3)]"/>
+            </template>
+          </template>
+      </div>
+    </div>
 
             <!-- 모달 팝업 창 -->
-            <FilterModal v-show="isFiltered" :categoryList="categoryList" @saveClose="listFilter" @close="isFiltered = false"/>
-    </div>
+    <FilterModal v-show="isFiltered" :categoryList="categoryList" @saveClose="listFilter" @close="isFiltered = false"/>
+  </div>
 </template>
 
 <script>
@@ -95,7 +95,6 @@ export default {
       this.listInitial(null,checkedCategory)
     },
     goDetail(id){
-      console.log(id)
       this.$router.push({ name: 'Detail', params: { id: id }})
     }
   },
@@ -103,10 +102,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#all-content-wrapper { 
-width: 60%;
-margin: 0 auto;
-display: flex;
+#main {
+  #all-content-wrapper { 
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
 
     @media only screen and (max-width: 768px) {
         width: 100%;
@@ -120,6 +120,8 @@ display: flex;
         width: 100%;
         }
     }
+  }
 }
+
 
 </style>

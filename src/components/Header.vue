@@ -1,12 +1,40 @@
 <template>
   <div id="header-container">
-      <p class="header-text">[2021년02월00일] 김수경</p>
+      <button v-if="this.$route.params.id && isMobile" class="header-btn" @click="back">  &#60; </button>
+      <p v-else class="header-text">[2021년02월00일] 김수경</p>
   </div>
 </template>
 
 <script>
 export default {
-
+     data(){
+        return {
+            isMobile: false
+        }
+    },
+    mounted(){
+        this.$nextTick(()=>{
+            this.onResize()
+        })
+        window.addEventListener('resize', this.onResize);
+    },
+    destroyed(){
+        window.removeEventListener('resize', this.onResize);
+    },
+    methods :{
+        onResize(){
+            const width = document.body.clientWidth;
+            if(width <= 768){
+                console.log("mobile")
+                this.isMobile = true
+            }else {
+                this.isMobile = false
+            }
+        },
+        back(){
+            this.$router.go(-1)
+        }
+    }
 }
 </script>
 
@@ -34,6 +62,15 @@ export default {
             margin: 0 15px;
             line-height: 45px;
         }
+    }
+
+    .header-btn {
+        margin: 0 15px;
+        font-size: 22px;
+        line-height: 45px;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 }
 
