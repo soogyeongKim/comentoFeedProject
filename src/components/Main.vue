@@ -89,8 +89,16 @@ export default {
       this.getContentList()
       this.getAdsList()
       setTimeout(() => {
-        this.loading = false;
-        this.setAllContentList()
+        if(this.contentList.length > parseInt(this.contentList.length/3) * 3){
+          this.setAllContentList()
+          this.loading = false;
+       }else{
+          this.getAdsList()
+          setTimeout(() => {
+            this.setAllContentList()
+            this.loading = false;
+          }, 1000)
+       }
       }, 1000)
     },
     listOrd(ord){

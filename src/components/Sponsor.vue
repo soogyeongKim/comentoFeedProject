@@ -5,7 +5,7 @@
         <img :src="`https://cdn.comento.kr/assignment/${ad.img}`" />
         <div class="sponsor-data">
             <p class="sponsor-title">
-                {{ ad.id }}
+                {{ ad.name }}
             </p>
             <p class="sponsor-content">
                 {{ ad.contents }}

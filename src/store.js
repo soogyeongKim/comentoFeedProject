@@ -19,6 +19,7 @@ const state = () => {
     categoryID: [],
     order: "asc",
     detail: {},
+    adsIndex: 0,
   };
 };
 
@@ -118,27 +119,24 @@ const mutations = {
     const ads = state.adsList;
     const content = state.contentList;
 
-    //데이터 유효성 확인
-    const isLoadedAds = ads.length <= (state.adsPage - 1) * 3;
-    const isLoadedContent = content.length <= (state.page - 1) * 10;
-
     const initPage = state.page - 2;
-    const initAdsPage = state.adsPage - 2;
 
     const type = { type: "content" };
     const adsType = { type: "sponsor" };
 
-    if (isLoadedAds && isLoadedContent && state.nextContents) {
-      let adsCnt = initAdsPage * 3;
+    if (state.nextContents) {
+      let adsCnt = 0;
       let temp = [];
 
       for (let i = initPage * 10; i < content.length; i++) {
         let obj = { ...content[i], ...type };
         temp.push(obj);
-        if ((i + 1) % 3 === 0 && adsCnt < ads.length) {
-          console.log(adsCnt);
-          let obj2 = { ...ads[adsCnt], ...adsType };
-          temp.push(obj2);
+        if ((i + 1) % 3 === 0) {
+          if (ads[adsCnt]) {
+            let obj2 = { ...ads[state.adsIndex], ...adsType };
+            temp.push(obj2);
+          }
+          state.adsIndex++;
           adsCnt++;
         }
       }
