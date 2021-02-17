@@ -103,6 +103,7 @@ const mutations = {
     state.allContentList = [];
     state.contentList = [];
     state.adsList = [];
+    state.adsIndex = 0;
   },
   setContentList(state, contentList) {
     //contents
