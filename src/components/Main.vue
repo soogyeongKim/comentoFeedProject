@@ -6,22 +6,20 @@
       </div>
       <div id="right-wrapper">
           <FilterBox @changeOrd="listOrd" @openFilterModal="isFiltered=true"/>
-          <template v-for="(content,index) in contentList.data" >
-            <Content :key="'content'+content.id" :content="content" :category="categoryList" @click.native="goDetail(content.id)"/>
-            <template v-if="(index + 1) % 3 === 0" >
-                <Sponsor :key="'ad'+index" :ad="adsList.data[parseInt(index/3)]"/>
-            </template>
+          <template v-for="(content, index) in allContentList">
+            <Content v-if="content.type === 'content'" :key="'content'+index" :content="content" :category="category" @click.native="goDetail(content.id)"/>
+            <Sponsor v-if="content.type === 'sponsor'" :key="'ad'+index" :ad="content"/>
           </template>
       </div>
     </div>
 
-            <!-- 모달 팝업 창 -->
-    <FilterModal v-show="isFiltered" :categoryList="categoryList" @saveClose="listFilter" @close="isFiltered = false"/>
+    <!-- 모달 팝업 창 -->
+    <FilterModal v-show="isFiltered" :categoryList="category" @saveClose="listFilter" @close="isFiltered = false"/>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import Login from './Login'
 import FilterBox from './FilterBox'
 import Content from './Content'
@@ -38,65 +36,75 @@ export default {
     FilterModal
   },
   data(){
-    return{
-      isFiltered : false,
-      allCategory : [],
-      checkedCategory : []
+    return {
+      loading : true,
+      isFiltered: false,
     }
   },
   mounted(){
-    this.getCategoryList()
-    this.adsInital()
+   this.getCategoryList()
+
+    //infiniteLoading 
+    window.addEventListener('scroll', () => {
+      if(document.documentElement.scrollTop + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+        this.loadContent()
+      }
+    });
   },
   computed: {
       ...mapGetters({
         contentList: 'contentList',
-        categoryList: 'categoryList',
-        adsList: 'adsList'
+        adsList: 'adsList',
+        allContentList: 'allContentList',
+        category: 'category',
+        selectedCategory:'selectedCategory',
+        order:'order',
+        nextPage: 'nextPage'
       })
   },
    watch:{
-     categoryList(category){
-       this.allCategory = category.map((c)=>c.id)
-       this.listInitial(null, this.allCategory)
-     }
+     category(){
+       this.loadContent()
+     },
+     selectedCategory(){
+       this.loadContent()
+     },
+     order(){
+        this.loadContent()
+     },
   },
   methods: {
     ...mapActions({
-      getContentList: 'getContentList',
       getCategoryList: 'getCategoryList',
+      getContentList: 'getContentList',
       getAdsList: 'getAdsList'
     }),
-    listInitial(ord, selectedCategory){
-      const orderList = ord ? ord : 'asc'
-      const params = {
-          page  : 1,
-          ord : orderList,
-          category : selectedCategory,
-          limit : 10,
-      }
-      this.getContentList(params)
-    },
-    adsInital(){
-      const params = {
-          page  : 1,
-          limit : 3,
-      }
-      this.getAdsList(params)
+    ...mapMutations({
+      initList: 'initList',
+      setAllContentList:'setAllContentList',
+      setOrder: 'setOrder',
+      setSelectedCategory : 'setSelectedCategory'
+    }),
+    loadContent(){
+      this.getContentList()
+      this.getAdsList()
+      setTimeout(() => {
+        this.loading = false;
+        this.setAllContentList()
+      }, 1000)
     },
     listOrd(ord){
-      if(ord){
-        this.listInitial(ord, this.checkedCategory && this.checkedCategory.length !== 0 ? this.checkedCategory : this.allCategory)
-      }
+      this.initList()
+      this.setOrder(ord)
     },
     listFilter(checkedCategory){
       this.isFiltered = false
-      this.checkedCategory = checkedCategory
-      this.listInitial(null,checkedCategory)
+      this.initList()
+      this.setSelectedCategory(checkedCategory)
     },
     goDetail(id){
       this.$router.push({ name: 'Detail', params: { id: id }})
-    }
+    },
   },
 }
 </script>

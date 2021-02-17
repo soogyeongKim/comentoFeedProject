@@ -25,7 +25,6 @@ export default {
         onResize(){
             const width = document.body.clientWidth;
             if(width <= 768){
-                console.log("mobile")
                 this.isMobile = true
             }else {
                 this.isMobile = false
