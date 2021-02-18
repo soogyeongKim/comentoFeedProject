@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -22,7 +23,12 @@ export default {
     }
   },
   created() {
-    this.selectedFilter = this.filters[0]
+    this.selectedFilter = this.order
+  },
+  computed: {
+    ...mapGetters({
+      order:'order',
+    })
   },
   methods: {
     changeFilter(filter){
