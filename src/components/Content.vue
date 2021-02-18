@@ -103,15 +103,15 @@ export default {
         line-height: 1.56;
 
         .content-title {
-           @include Title;
-           white-space: nowrap;
+            @include Title;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .content-contents {
-           @include Contents;
-           white-space: nowrap;
+            @include Contents;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }

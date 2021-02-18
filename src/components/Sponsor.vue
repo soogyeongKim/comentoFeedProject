@@ -79,14 +79,21 @@ export default {
                 display: -webkit-box;
                 -webkit-line-clamp: 2;
                 -webkit-box-orient: vertical; 
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    height: 3rem;
+                }   
             }
 
             .sponsor-content {
                 @include Contents;
-                 overflow: hidden;
+                overflow: hidden;
                 display: -webkit-box;
                 -webkit-line-clamp: 4;
                 -webkit-box-orient: vertical; 
+
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    height: 6rem;
+                }   
             }
         }
     }
