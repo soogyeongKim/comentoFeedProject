@@ -1,7 +1,7 @@
 <template>
   <div id="header-container">
       <button v-if="this.$route.params.id && isMobile" class="header-btn" @click="back">  &#60; </button>
-      <p v-else class="header-text">[2021년02월00일] 김수경</p>
+      <p v-else class="header-text">[2021년02월19일] 김수경</p>
   </div>
 </template>
 
