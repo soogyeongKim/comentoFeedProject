@@ -6,6 +6,8 @@ Vue.use(Vuex);
 
 const state = () => {
   return {
+    loading: true,
+    detailLoading: true,
     page: 1,
     nextPage: true,
     adsPage: 1,
@@ -38,6 +40,7 @@ const actions = {
 
   //글 리스트
   async getContentList({ state, commit }) {
+    state.loading = true;
     const params = {
       page: state.page,
       ord: state.order,
@@ -83,6 +86,7 @@ const actions = {
 
   //글 디테일
   async getDetail({ commit }, params) {
+    state.detailLoading = true;
     await axios
       .get(`/api/view`, { params })
       .then((res) => {
@@ -96,6 +100,7 @@ const actions = {
 
 const mutations = {
   initList(state) {
+    state.loading = true;
     state.page = 1;
     state.nextPage = true;
     state.adsPage = 1;
@@ -142,6 +147,7 @@ const mutations = {
         }
       }
       state.allContentList = [...state.allContentList, ...temp];
+      state.loading = false;
     }
   },
   setOrder(state, order) {
@@ -162,10 +168,14 @@ const mutations = {
   },
   setDetail(state, detail) {
     state.detail = detail;
+    state.detailLoading = false;
   },
 };
 
 const getters = {
+  loading(state) {
+    return state.loading;
+  },
   contentList(state) {
     return state.contentList;
   },
@@ -192,6 +202,9 @@ const getters = {
   },
   detail(state) {
     return state.detail;
+  },
+  detailLoading(state) {
+    return state.detailLoading;
   },
 };
 

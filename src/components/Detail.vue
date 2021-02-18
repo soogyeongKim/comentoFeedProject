@@ -11,24 +11,38 @@
         <p class="reply-contents">{{ reply.contents }}</p>
         <p class="reply-date">created_at({{ dateFormat(reply.created_at) }})</p>
       </div>
+      <Loading :loading="detailLoading"/>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import Loading from './Loading'
 export default {
     name: "Detail",
-    created () {
-        this.getDetail({id : this.$route.params.id})
+    components: {
+        Loading
+    },
+    mounted(){
+        this.$nextTick(()=>{
+            this.getDetail({id : this.$route.params.id})
+        })
+    },
+    beforeDestroy(){
+        this.setDetail({})
     },
     computed: {
         ...mapGetters({
             detail: 'detail',
+            detailLoading:'detailLoading'
         })
     },
     methods: {
         ...mapActions({
             getDetail: 'getDetail',
+        }),
+        ...mapMutations({
+            setDetail:'setDetail'
         }),
         dateFormat(createdDate){
             let date = new Date(createdDate);

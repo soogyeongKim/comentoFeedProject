@@ -12,9 +12,9 @@
           </template>
       </div>
     </div>
-
     <!-- 모달 팝업 창 -->
     <FilterModal v-show="isFiltered" :categoryList="category" @saveClose="listFilter" @close="isFiltered = false"/>
+    <Loading :loading="loading"/>
   </div>
 </template>
 
@@ -25,6 +25,7 @@ import FilterBox from './FilterBox'
 import Content from './Content'
 import Sponsor from './Sponsor'
 import FilterModal from './FilterModal'
+import Loading from './Loading'
 
 export default {
   name: 'Main',
@@ -33,11 +34,11 @@ export default {
     FilterBox,
     Content,
     Sponsor,
-    FilterModal
+    FilterModal,
+    Loading
   },
   data(){
     return {
-      loading : true,
       isFiltered: false,
     }
   },
@@ -45,15 +46,17 @@ export default {
    this.getCategoryList()
 
     //infiniteLoading 
-    window.addEventListener('scroll', () => {
-      if(document.documentElement.scrollTop + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-        this.loadContent()
-      }
-    });
+    this.$nextTick(()=>{
+        window.addEventListener('scroll',this.scrollBottom);
+    })
+  },
+  beforeDestroy(){
+    window.removeEventListener('scroll',this.scrollBottom);
   },
   computed: {
       ...mapGetters({
         contentList: 'contentList',
+        loading:'loading',
         adsList: 'adsList',
         allContentList: 'allContentList',
         category: 'category',
@@ -85,18 +88,22 @@ export default {
       setOrder: 'setOrder',
       setSelectedCategory : 'setSelectedCategory'
     }),
+    scrollBottom(){
+      let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight
+        if(bottomOfWindow) {
+          this.loadContent()
+        }
+    },
     loadContent(){
       this.getContentList()
       this.getAdsList()
       setTimeout(() => {
         if(this.contentList.length > parseInt(this.contentList.length/3) * 3){
           this.setAllContentList()
-          this.loading = false;
        }else{
           this.getAdsList()
           setTimeout(() => {
             this.setAllContentList()
-            this.loading = false;
           }, 1000)
        }
       }, 1000)
