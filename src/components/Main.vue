@@ -54,16 +54,16 @@ export default {
     window.removeEventListener('scroll',this.scrollBottom);
   },
   computed: {
-      ...mapGetters({
-        contentList: 'contentList',
-        loading:'loading',
-        adsList: 'adsList',
-        allContentList: 'allContentList',
-        category: 'category',
-        selectedCategory:'selectedCategory',
-        order:'order',
-        nextPage: 'nextPage'
-      })
+    ...mapGetters({
+      contentList: 'contentList',
+      loading:'loading',
+      adsList: 'adsList',
+      allContentList: 'allContentList',
+      category: 'category',
+      selectedCategory:'selectedCategory',
+      order:'order',
+      nextPage: 'nextPage'
+    })
   },
    watch:{
      category(){
@@ -132,16 +132,16 @@ export default {
     display: flex;
 
     @media only screen and (max-width: 768px) {
-        width: 100%;
-        margin: 0;
+      width: 100%;
+      margin: 0;
     }
 
     #right-wrapper {
-        width: calc(100% - 275px);
+      width: calc(100% - 275px);
 
-        @media only screen and (max-width: 768px) {
+      @media only screen and (max-width: 768px) {
         width: 100%;
-        }
+      }
     }
   }
 }

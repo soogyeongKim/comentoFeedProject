@@ -1,7 +1,7 @@
 <template>
   <div id="login-container">
-      <button class="login-btn">로그인</button>
-    </div>
+    <button class="login-btn">로그인</button>
+  </div>
 </template>
 
 <script>

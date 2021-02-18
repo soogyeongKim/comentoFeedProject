@@ -1,17 +1,17 @@
 <template>
   <div id="detail">
-      <div class="detail-box">
-          <p class="detail-title">{{ detail.title }}</p>
-          <p class="detail-contents">{{ detail.contents }}</p>
-          <p class="detail-date">created_at({{ dateFormat(detail.created_at) }})</p>
-      </div>
-      <p class="reply-label">답변 <span v-if="detail.reply && detail.reply.length > 1">{{ detail.reply.length }}</span></p>
-      <div class="reply-box" v-for="(reply, index) in detail.reply" :key="'reply'+index">
+    <div class="detail-box">
+        <p class="detail-title">{{ detail.title }}</p>
+        <p class="detail-contents">{{ detail.contents }}</p>
+        <p class="detail-date">created_at({{ dateFormat(detail.created_at) }})</p>
+    </div>
+    <p class="reply-label">답변 <span v-if="detail.reply && detail.reply.length > 1">{{ detail.reply.length }}</span></p>
+    <div class="reply-box" v-for="(reply, index) in detail.reply" :key="'reply'+index">
         <p class="reply-username">{{ reply.user.name }}</p>
         <p class="reply-contents">{{ reply.contents }}</p>
         <p class="reply-date">created_at({{ dateFormat(reply.created_at) }})</p>
-      </div>
-      <Loading :loading="detailLoading"/>
+    </div>
+    <Loading :loading="detailLoading"/>
   </div>
 </template>
 
