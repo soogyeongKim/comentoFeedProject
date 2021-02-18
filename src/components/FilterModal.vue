@@ -6,8 +6,8 @@
             <button class="modal-close" @click="$emit('close')">&#215;</button>
             <div class="modal-body">
             <p>필터</p>
-            <div class="modal-checkbox"   v-for="(category,index) in categoryList" :key="'category'+index" id="category.id">
-                <input type="checkbox" :id="category.id" :value="category.id" v-model="checkedCategory" >
+            <div class="modal-checkbox" v-for="(category,index) in categoryList" :key="'category'+index" id="category.id">
+                <input type="checkbox" checked=true :id="category.id" :value="category" v-model="checkedCategory" >
                 <label :for="category.id">{{category.name}}</label>
             </div>
             </div>
@@ -24,16 +24,30 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     props: {
-        categoryList: {
-            type: Array,
-        },
+      categoryList: {
+          type: Array,
+      },
     },
     data(){
-        return{
-            checkedCategory:[]
-        }
+      return{
+        checkedCategory:[]
+      }
+    },
+    computed : {
+      ...mapGetters({
+        selectedCategory:'selectedCategory',
+      })
+    },
+    watch : {
+      selectedCategory(selected){
+        this.checkedCategory = selected
+      }
+    },
+    mounted () {
+      this.checkedCategory = this.selectedCategory
     }
 }
 </script>

@@ -17,9 +17,13 @@ const state = () => {
     adsList: [],
     allContentList: [],
     category: [],
-    selectedCategory: [],
+    selectedCategory: localStorage.getItem("selectedCategory")
+      ? JSON.parse(localStorage.getItem("selectedCategory"))
+      : [],
     categoryID: [],
-    order: "asc",
+    order: localStorage.getItem("order")
+      ? localStorage.getItem("order")
+      : "asc",
     detail: {},
     adsIndex: 0,
   };
@@ -46,7 +50,7 @@ const actions = {
       ord: state.order,
       category:
         state.selectedCategory && state.selectedCategory.length > 0
-          ? state.selectedCategory
+          ? [...state.selectedCategory.map((s) => s.id)]
           : state.categoryID,
       limit: 10,
     };
@@ -152,6 +156,7 @@ const mutations = {
   },
   setOrder(state, order) {
     state.order = order;
+    localStorage.setItem("order", order);
   },
   setCategory(state, category) {
     state.category = category;
@@ -159,6 +164,7 @@ const mutations = {
   },
   setSelectedCategory(state, selectedCategory) {
     state.selectedCategory = selectedCategory;
+    localStorage.setItem("selectedCategory", JSON.stringify(selectedCategory));
   },
   setNextPage(state, nextPage) {
     state.nextPage = nextPage ? true : false;
