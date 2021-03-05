@@ -66,6 +66,7 @@ const actions = {
         });
     } else {
       state.nextContents = false;
+      state.loading = false;
     }
   },
 
